@@ -6,14 +6,14 @@ import 'package:weatherapp_starter_project/widgets/header_widget.dart';
 import 'package:weatherapp_starter_project/widgets/current_weather_widget.dart';
 
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class WeatherScreen extends StatefulWidget {
+  const WeatherScreen({super.key});
 
   @override
-  State <HomeScreen> createState() =>  HomeScreenState();
+  State <WeatherScreen> createState() =>  WeatherScreenState();
 }
 
-class  HomeScreenState extends State <HomeScreen> {
+class  WeatherScreenState extends State <WeatherScreen> {
   final GlobalController globalController = Get.put(GlobalController(), permanent: true);
   @override
   Widget build(BuildContext context) {
