@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp_starter_project/screens/weather_screen.dart';
+import 'package:weatherapp_starter_project/screens/map_screen.dart';
 
 class NavBar extends StatefulWidget {
   // This class is the configuration for the state.
@@ -18,10 +19,7 @@ class _NavbarState extends State<NavBar> {
   int _selectedIndex = 0;
   static const List<Widget> _pages = <Widget>[
     WeatherScreen(),
-    Icon(
-      Icons.camera,
-      size: 150,
-    ),
+    MapScreen(),
     Icon(
       Icons.chat,
       size: 150,
@@ -54,10 +52,12 @@ class _NavbarState extends State<NavBar> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        showUnselectedLabels: false,
       ),
-      body: Center(
-        child: _pages.elementAt(_selectedIndex), //New
-      ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      )
     );
   }
   void _onItemTapped(int index) {
