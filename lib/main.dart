@@ -11,10 +11,12 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
-      home: NavBar(),
+    return GetMaterialApp(
+      home: const NavBar(),
       title: "Weather",
-      debugShowCheckedModeBanner: false
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
+      theme: ThemeData.dark(useMaterial3: true)
     );
   }
 }
