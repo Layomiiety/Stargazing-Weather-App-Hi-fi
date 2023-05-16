@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.18.1
   latext: ^0.0.3
   sleek_circular_slider: ^2.0.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
 
@@ -61,6 +62,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/weather/
+    - assets/map_style.json
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
