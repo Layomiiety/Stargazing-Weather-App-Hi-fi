@@ -36,15 +36,17 @@ class CurrentWeatherWidget extends StatelessWidget {
           children: [
             //temperature
             Container(
-              height: 100,
-              width: 200,
+              height: 119,
+              width: 210,
               margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
               decoration: BoxDecoration(
                 color: CustomColors.boxcolor.withAlpha(150),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Row(
+              child: Column(
+                children:[
+                  Row(
                 children:[
                 Container(
                   height: 60,
@@ -54,74 +56,92 @@ class CurrentWeatherWidget extends StatelessWidget {
                     color: CustomColors.cardcolor,
                     borderRadius: BorderRadius.circular(35),
                   ),
-                  child: Image.asset("assets/icons/temp.png"),
+                  child: Image.asset("assets/weather/${weatherCurrentData.current.weather![0].icon}.png"),
                 ),
-              Container(
+              const SizedBox(
                 height:60,
-                width: 10,
+                width: 20,
                 //color: CustomColors.dividecolor
               ),
               RichText(text: TextSpan(children: [
                 TextSpan(
-                    text: "${weatherCurrentData.current.temp!.toInt()}°",
+                    text: "${weatherCurrentData.current.temp!.toInt()}°C",
                     style: const TextStyle(
+                      fontFamily: 'Ysabeau',
                       fontWeight: FontWeight.w600,
-                      fontSize: 35,
+                      fontSize: 30,
                       color: CustomColors.textwhitecolor,
                     )
                 ),
-                TextSpan(
-                    text: "${weatherCurrentData.current.weather![0].description}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: Colors.grey,
-                    )
-                ),
               ])),
-              ])),
+              ]),
+                  const SizedBox(
+                    height:5,
+                  ),
+                  RichText(text: const TextSpan(children: [
+                    TextSpan(
+                        text: "Temperature",
+                        style: TextStyle(
+                          fontFamily: 'HandWritten',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15,
+                          color: CustomColors.textwhitecolor,
+                        )
+                    ),
+                  ])),
+                ])),
             //cloud cover
             Container(
-                height: 100,
-                width: 200,
+                height: 118,
+                width: 210,
                 margin: const EdgeInsets.all(20),
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: CustomColors.boxcolor.withAlpha(150),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Row(
+                child: Column(
                     children:[
-                      Container(
-                        height: 60,
-                        width: 60,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: CustomColors.cardcolor,
-                          borderRadius: BorderRadius.circular(35),
-                        ),
-                        child: Image.asset("assets/icons/clouds.png"),
+                      Row(
+                          children:[
+                            Container(
+                              height: 60,
+                              width: 60,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: CustomColors.cardcolor,
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                              child: Image.asset("assets/icons/clouds.png"),
+                            ),
+                            const SizedBox(
+                              height:60,
+                              width: 20,
+                              //color: CustomColors.dividecolor
+                            ),
+                            RichText(text: TextSpan(children: [
+                              TextSpan(
+                                  text: "${weatherCurrentData.current.clouds!.toInt()}%",
+                                  style: const TextStyle(
+                                    fontFamily: 'handwritten',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 35,
+                                    color: CustomColors.textwhitecolor,
+                                  )
+                              ),
+                            ])),
+                          ]),
+                      const SizedBox(
+                        height:10,
                       ),
-                      Container(
-                        height:60,
-                        width: 10,
-                        //color: CustomColors.dividecolor
-                      ),
-                      RichText(text: TextSpan(children: [
+                      RichText(text: const TextSpan(children: [
                         TextSpan(
-                            text: "${weatherCurrentData.current.clouds!.toInt()}%",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 35,
-                              color: CustomColors.textwhitecolor,
-                            )
-                        ),
-                        TextSpan(
-                            text: "${weatherCurrentData.current.weather![0].description}",
-                            style: const TextStyle(
+                            text: "Cloud Cover",
+                            style: TextStyle(
+                              fontFamily: 'HandWritten',
                               fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Colors.grey,
+                              fontSize: 15,
+                              color: CustomColors.textwhitecolor,
                             )
                         ),
                       ])),
@@ -332,9 +352,11 @@ class CurrentWeatherWidget extends StatelessWidget {
   }
   Widget CurrentWeatherWidget_4(){
     return
-      Row(
+      Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Row(
+          children: [
           //temperature
           Container(
               height: 100,
@@ -408,27 +430,21 @@ class CurrentWeatherWidget extends StatelessWidget {
                       width: 10,
                       //color: CustomColors.dividecolor
                     ),
-                    RichText(text: TextSpan(children: [
-                      TextSpan(
-                          text: "${weatherCurrentData.current.clouds!.toInt()}%",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 35,
-                            color: CustomColors.textwhitecolor,
-                          )
-                      ),
-                      TextSpan(
-                          text: "${weatherCurrentData.current.weather![0].description}",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: Colors.grey,
-                          )
-                      ),
-                    ])),
-                  ])),
+                    RichText(text: TextSpan(
+                          children: [
+                          TextSpan(
+                              text: "${weatherCurrentData.current.clouds!.toInt()}%",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 35,
+                                color: CustomColors.textwhitecolor,
+                              )
+                          )])),
         ],
-      );
+      ))]),
+
+
+        ]);
   }
   Widget CurrentWeatherWidget_5(){
     return
