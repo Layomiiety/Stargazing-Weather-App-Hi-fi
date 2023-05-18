@@ -16,12 +16,12 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   String city = "";
   String date = DateFormat("yMMMMd").format(DateTime.now());
 
-
-
-  final GlobalController globalController = Get.put(GlobalController(), permanent: true);
+  final GlobalController globalController =
+      Get.put(GlobalController(), permanent: true);
   @override
-  void initState(){
-    getAddress(globalController.getLatitude().value, globalController.getLongitude().value);
+  void initState() {
+    getAddress(globalController.getLatitude().value,
+        globalController.getLongitude().value);
 
     super.initState();
   }
@@ -33,26 +33,30 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     // setState((){
     //   city = place.locality!;
     // });
-    setState((){
+    setState(() {
       city = "Cambridge";
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      //location
-      Container(
-        margin : const EdgeInsets.only(left: 20, right: 20),
-        alignment: Alignment.topLeft,
-        child: Text(city, style: const TextStyle(fontSize: 35, height: 2)),
-      ), 
-      //date
-      Container(
-        margin : const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        alignment: Alignment.topLeft,
-        child: Text(date, style: const TextStyle(fontSize: 14, color: Colors.grey, height: 1.5)),
-      )
-      
-    ],);
+    return Column(
+      children: [
+        //location
+        Container(
+          margin: const EdgeInsets.only(left: 20, right: 20),
+          alignment: Alignment.topLeft,
+          child: Text(city, style: const TextStyle(fontSize: 35, height: 2)),
+        ),
+        //date
+        Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          alignment: Alignment.topLeft,
+          child: Text(date,
+              style: const TextStyle(
+                  fontSize: 14, color: Colors.grey, height: 1.5)),
+        )
+      ],
+    );
   }
 }

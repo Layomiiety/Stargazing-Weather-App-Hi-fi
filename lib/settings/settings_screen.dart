@@ -52,6 +52,7 @@ class SettingsState extends State<SettingsScreen> {
 
   MaterialApp settingsPage() {
     const List<String> temperatureUnitsList = <String>['°C', '°F'];
+    const List<String> visibilityUnitsList = <String>['km', 'm', 'ft', 'miles'];
     const List<String> windSpeedUnitsList = <String>[
       'km/h',
       'm/s',
@@ -85,6 +86,21 @@ class SettingsState extends State<SettingsScreen> {
                           onChanged: (String? value) {
                             setState(() {
                               Preferences.temperatureUnits = value!;
+                            });
+                          })
+                    ]),
+                    Row(children: [
+                      const Text('Visibility'),
+                      DropdownButton(
+                          value: Preferences.visibilityUnits,
+                          items: visibilityUnitsList
+                              .map<DropdownMenuItem<String>>((String s) {
+                            return DropdownMenuItem<String>(
+                                value: s, child: Text(s));
+                          }).toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              Preferences.visibilityUnits = value!;
                             });
                           })
                     ]),
