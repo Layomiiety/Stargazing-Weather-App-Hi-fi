@@ -4,8 +4,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/controllers/global_controller.dart';
 
+import '../models/weather_daily_data.dart';
+
 class HeaderWidget extends StatefulWidget {
-  const HeaderWidget({super.key});
+  final WeatherDailyData weatherDailyData;
+  final int index;
+  const HeaderWidget({Key? key,
+    required this.weatherDailyData,
+    required this.index,
+  }): super(key: key);
 
   @override
   State<HeaderWidget> createState() => _HeaderWidgetState();
@@ -14,7 +21,6 @@ class HeaderWidget extends StatefulWidget {
 class _HeaderWidgetState extends State<HeaderWidget> {
   //varibles
   String city = "";
-  String date = DateFormat("yMMMMd").format(DateTime.now());
 
 
 
@@ -39,6 +45,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   }
   @override
   Widget build(BuildContext context) {
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(1000 * widget.weatherDailyData.daily[widget.index].dt!.toInt());
+    String date = DateFormat("yMMMMd").format(time);
     return Column(children: [
       //location
       Container(
