@@ -1,4 +1,0 @@
-#Tue May 16 02:36:04 BST 2023
-base.0=/Users/unovafrosmoth/Desktop/cam/stargazing_app/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
