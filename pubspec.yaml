@@ -37,6 +37,8 @@ dependencies:
   intl: ^0.18.1
   latext: ^0.0.3
   sleek_circular_slider: ^2.0.1
+  google_maps_flutter: ^2.2.6
+  url_launcher: ^6.1.1
 
 dev_dependencies:
 
@@ -61,6 +63,7 @@ flutter:
     - assets/icons/
     - assets/weather/
     - assets/fonts/
+    - assets/map_style.json
   fonts:
     - family: HandWritten
       fonts:
@@ -71,7 +74,6 @@ flutter:
         - asset: assets/fonts/Ysabeau-Regular.ttf
         - asset: assets/fonts/Ysabeau-Italic.ttf
           style: italic
-    - assets/map_style.json
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
