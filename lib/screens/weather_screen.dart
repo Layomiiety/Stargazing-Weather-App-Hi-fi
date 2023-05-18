@@ -15,32 +15,50 @@ class WeatherScreen extends StatefulWidget {
 
 class  WeatherScreenState extends State <WeatherScreen> {
   final GlobalController globalController = Get.put(GlobalController(), permanent: true);
+  int currentpage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Obx(() => globalController.checkLoading().isTrue ? const Center(
-          child: CircularProgressIndicator(),
-        )
-        : Center(
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              const SizedBox(height: 20,), //padding
-              const HeaderWidget(), // location and date
-              CurrentWeatherWidget(
-                weatherCurrentData: globalController.getWeatherData().getCurrentWeather(),
-              ),
-              const SizedBox(
-                height:20,
-              ),
-              DailyWeatherForecast(
-                weatherDailyData: globalController.getWeatherData().getDailyWeather(),
-              ),
-            ],
-            )
+      body: PageView.builder(
+        itemBuilder: (context, index){
+          return SafeArea(child: Obx(() => globalController.checkLoading().isTrue ? const Center(
+            child: CircularProgressIndicator(),
+          )
+              : Center(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  const SizedBox(height: 20,), //padding
+                  HeaderWidget(
+                    weatherDailyData: globalController.getWeatherData().getDailyWeather(),
+                    index: index,
+                  ), // location and date
+                  CurrentWeatherWidget(
+                    weatherDailyData: globalController.getWeatherData().getDailyWeather(),
+                    index: index,
+                  ),
+                  const SizedBox(
+                    height:20,
+                  ),
+                  DailyWeatherForecast(
+                    weatherDailyData: globalController.getWeatherData().getDailyWeather(),
+                    index: index,
+                  ),
+                ],
+              )
           ),
-        ),
+          ),);
+        },
+        itemCount: 3,
+        scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
+        onPageChanged: (index){
+          setState(() {
+            currentpage = index;
+          });
+          print(index);
+        },
+
       ),
     );
   }

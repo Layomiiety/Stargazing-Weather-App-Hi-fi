@@ -5,7 +5,11 @@ import 'package:weatherapp_starter_project/utils/custom_colors.dart';
 
 class DailyWeatherForecast extends StatelessWidget {
   final WeatherDailyData weatherDailyData;
-  const DailyWeatherForecast({Key? key, required this.weatherDailyData}): super(key: key);
+  final int index;
+  const DailyWeatherForecast({Key? key,
+    required this.weatherDailyData,
+    required this.index,
+  }): super(key: key);
 
 
   String getDay(final day){
@@ -16,6 +20,7 @@ class DailyWeatherForecast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Daily daily = weatherDailyData.daily[index];
     return Container(
         height: 220,
         margin: const EdgeInsets.all(20),

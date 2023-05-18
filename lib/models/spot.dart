@@ -1,6 +1,3 @@
-// import 'dart:ffi';
-import 'dart:developer' as developer;
-
 class Spot{
   final double lat;
   final double lng;
