@@ -51,6 +51,12 @@ class SettingsState extends State<SettingsScreen> {
   }
 
   MaterialApp settingsPage() {
+    const List<String> dateFormatsList = <String>[
+      'MMMM dd,yyyy',
+      'ddMMMMyyyy',
+      'MMMM dd',
+      'ddMMMM'
+    ];
     const List<String> temperatureUnitsList = <String>['°C', '°F'];
     const List<String> visibilityUnitsList = <String>['km', 'm', 'ft', 'miles'];
     const List<String> windSpeedUnitsList = <String>[
@@ -74,6 +80,21 @@ class SettingsState extends State<SettingsScreen> {
                     child: Column(
                   children: [
                     const Text('Units'),
+                    Row(children: [
+                      const Text('Date Format'),
+                      DropdownButton(
+                          value: Preferences.dateFormat,
+                          items: dateFormatsList
+                              .map<DropdownMenuItem<String>>((String s) {
+                            return DropdownMenuItem<String>(
+                                value: s, child: Text(s));
+                          }).toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              Preferences.dateFormat = value!;
+                            });
+                          })
+                    ]),
                     Row(children: [
                       const Text('Temperature'),
                       DropdownButton(

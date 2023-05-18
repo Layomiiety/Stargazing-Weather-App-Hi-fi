@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/controllers/global_controller.dart';
 
+import 'package:weatherapp_starter_project/settings/Preferences.dart';
+
 class HeaderWidget extends StatefulWidget {
   const HeaderWidget({super.key});
 
@@ -14,7 +16,7 @@ class HeaderWidget extends StatefulWidget {
 class _HeaderWidgetState extends State<HeaderWidget> {
   //varibles
   String city = "";
-  String date = DateFormat("yMMMMd").format(DateTime.now());
+  String date = DateFormat(Preferences.getDateFormat()).format(DateTime.now());
 
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);

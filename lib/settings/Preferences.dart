@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart'; */
 
 class Preferences {
   static String temperatureUnits = '°C';
   static String windSpeedUnits = 'km/h';
   static String visibilityUnits = 'km';
+  static String dateFormat = 'MMMM dd,yyyy';
   static bool useCurrentLocation = true;
   static List<String> favouriteLocations = <String>[];
 
@@ -89,5 +90,32 @@ class Preferences {
         break;
     }
     return '$ret $visibilityUnits';
+  }
+
+  static String getDateFormat() {
+    late String ret;
+    switch (dateFormat) {
+      case 'MMMM dd,yyyy':
+        {
+          ret = 'yMMMMd';
+        }
+        break;
+      case 'ddMMMMyyyy':
+        {
+          ret = 'dMMMMy';
+        }
+        break;
+      case 'MMMM dd':
+        {
+          ret = 'MMMMd';
+        }
+        break;
+      case 'ddMMMM':
+        {
+          ret = 'dMMMM';
+        }
+        break;
+    }
+    return ret;
   }
 }
