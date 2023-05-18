@@ -7,7 +7,12 @@ import 'package:weatherapp_starter_project/controllers/global_controller.dart';
 import 'package:weatherapp_starter_project/settings/Preferences.dart';
 
 class HeaderWidget extends StatefulWidget {
-  const HeaderWidget({super.key});
+  final WeatherDailyData weatherDailyData;
+  final int index;
+  const HeaderWidget({Key? key,
+    required this.weatherDailyData,
+    required this.index,
+  }): super(key: key);
 
   @override
   State<HeaderWidget> createState() => _HeaderWidgetState();
