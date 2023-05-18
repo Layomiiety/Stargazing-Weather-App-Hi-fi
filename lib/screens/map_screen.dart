@@ -30,9 +30,7 @@ class _MapScreenState extends State<MapScreen> {
   GoogleMapController? _controller;
   Position? currentLocation;
 
-  var lightOn = false;
-  var cloudOn = false;
-
+  var layerActive = [false, false];
   @override
   void initState() {
     super.initState();
@@ -127,11 +125,11 @@ Widget build(BuildContext context) {
           child: Column(
             children: <Widget>[
               Row(children: <Widget>[
-                Checkbox(value: lightOn, onChanged: showLight),
+                Checkbox(value: layerActive[0], onChanged: showLight),
                 const Icon(Icons.lightbulb)
               ]),
               Row(children: <Widget>[
-                Checkbox(value: cloudOn, onChanged: showCloud),
+                Checkbox(value: layerActive[1], onChanged: showCloud),
                 const Icon(Icons.cloud)
               ]),
             ],
@@ -142,13 +140,14 @@ Widget build(BuildContext context) {
   );
 }
   void showLight(bool? value) {
-    showLayer(allOverlays[0], value);
+    showLayer(0, value);
   }
   void showCloud(bool? value) {
-    showLayer(allOverlays[1], value);
+    showLayer(1, value);
   }
-  void showLayer(TileOverlay layer, bool? value) {
-    cloudOn = value!;
+  void showLayer(int index, bool? value) {
+    layerActive[index] = value!;
+    var layer = allOverlays[index];
     if (currentOverlays.contains(layer) && !value) {
       var newOverlays = currentOverlays;
       newOverlays.remove(layer);
