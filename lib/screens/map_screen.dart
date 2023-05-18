@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:weatherapp_starter_project/api/fetch_spots.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:weatherapp_starter_project/api/light_tiles.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -14,12 +15,23 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
 
   Set<Marker> spotMarkers = {const Marker(markerId: MarkerId("test"), position: LatLng(0, 0))};
+  Set<TileOverlay> currentOverlays = {};
+  var allOverlays = [
+    TileOverlay(tileOverlayId: const TileOverlayId("light"),
+                tileProvider: LightTileProvider("PostGIS:VIIRS_2022")),
+    TileOverlay(tileOverlayId: const TileOverlayId("cloud"),
+                tileProvider: LightTileProvider("PostGIS%3Acloudcover_13"))
+  ];
+  
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(52.206133, 0.12119293),
     zoom: 8,
   );
   GoogleMapController? _controller;
   Position? currentLocation;
+
+  var lightOn = false;
+  var cloudOn = false;
 
   @override
   void initState() {
@@ -42,6 +54,7 @@ class _MapScreenState extends State<MapScreen> {
 
         ));
       }
+
       setState((){
         spotMarkers = newMarkers;
       });
@@ -68,6 +81,7 @@ Widget build(BuildContext context) {
       GoogleMap(
         initialCameraPosition: _initialCameraPosition,
         onMapCreated: onMapCreated,
+        tileOverlays: currentOverlays,
         markers: spotMarkers,
       ),
       Positioned(
@@ -101,6 +115,53 @@ Widget build(BuildContext context) {
           ),
         ),
       ),
+      Positioned(
+        top: 120,
+        right: 20,
+        width: 90,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white70),
+              color: Colors.black),
+          child: Column(
+            children: <Widget>[
+              Row(children: <Widget>[
+                Checkbox(value: lightOn, onChanged: showLight),
+                const Icon(Icons.lightbulb)
+              ]),
+              Row(children: <Widget>[
+                Checkbox(value: cloudOn, onChanged: showCloud),
+                const Icon(Icons.cloud)
+              ]),
+            ],
+          ),
+        ),
+      ),
     ],
   );
-}}
+}
+  void showLight(bool? value) {
+    showLayer(allOverlays[0], value);
+  }
+  void showCloud(bool? value) {
+    showLayer(allOverlays[1], value);
+  }
+  void showLayer(TileOverlay layer, bool? value) {
+    cloudOn = value!;
+    if (currentOverlays.contains(layer) && !value) {
+      var newOverlays = currentOverlays;
+      newOverlays.remove(layer);
+      setState(() {
+        currentOverlays = newOverlays;
+      });
+    }
+    else if (!currentOverlays.contains(layer) && value) {
+      var newOverlays = currentOverlays;
+      newOverlays.add(layer);
+      setState(() {
+        currentOverlays = newOverlays;
+      });
+    }
+  }
+}
