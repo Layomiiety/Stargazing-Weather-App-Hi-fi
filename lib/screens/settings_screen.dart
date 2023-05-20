@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:weatherapp_starter_project/settings/Preferences.dart';
+import 'package:weatherapp_starter_project/models/preferences.dart';
 import 'package:weatherapp_starter_project/screens/weather_screen.dart';
 
 class SettingsScreen extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:weatherapp_starter_project/widgets/daily_weather_forecast.dart';
 import 'package:weatherapp_starter_project/widgets/header_widget.dart';
 import 'package:weatherapp_starter_project/widgets/current_weather_widget.dart';
 
-import 'package:weatherapp_starter_project/settings/settings_screen.dart';
+import 'package:weatherapp_starter_project/screens/settings_screen.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});

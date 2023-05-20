@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/controllers/global_controller.dart';
 
-import 'package:weatherapp_starter_project/settings/Preferences.dart';
+import 'package:weatherapp_starter_project/models/preferences.dart';
 import 'package:weatherapp_starter_project/models/weather_daily_data.dart';
 
 class HeaderWidget extends StatefulWidget {
