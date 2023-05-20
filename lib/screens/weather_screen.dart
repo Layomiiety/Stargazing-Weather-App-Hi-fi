@@ -18,7 +18,7 @@ class WeatherScreenState extends State<WeatherScreen> {
   bool _showSettingsPage = false;
 
   final GlobalController globalController =
-      Get.put(GlobalController(), permanent: true);
+  Get.put(GlobalController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -35,34 +35,46 @@ class WeatherScreenState extends State<WeatherScreen> {
           IconButton(onPressed: _openSettings, icon: const Icon(Icons.settings))
         ],
       ),
-      body: SafeArea(
-        child: Obx(
-          () => globalController.checkLoading().isTrue
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+      body: PageView.builder(
+        itemBuilder: (context, index) {
+          return SafeArea(child: Obx(() =>
+          globalController
+              .checkLoading()
+              .isTrue ? const Center(
+            child: CircularProgressIndicator(),
+          )
               : Center(
-                  child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ), //padding
-                    const HeaderWidget(), // location and date
-                    CurrentWeatherWidget(
-                      weatherCurrentData:
-                          globalController.getWeatherData().getCurrentWeather(),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DailyWeatherForecast(
-                      weatherDailyData:
-                          globalController.getWeatherData().getDailyWeather(),
-                    ),
-                  ],
-                )),
-        ),
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  const SizedBox(height: 20,), //padding
+                  HeaderWidget(
+                    weatherDailyData: globalController.getWeatherData()
+                        .getDailyWeather(),
+                    index: index,
+                  ), // location and date
+                  CurrentWeatherWidget(
+                    weatherDailyData: globalController.getWeatherData()
+                        .getDailyWeather(),
+                    index: index,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DailyWeatherForecast(
+                    weatherDailyData: globalController.getWeatherData()
+                        .getDailyWeather(),
+                    index: index,
+                  ),
+                ],
+              )
+          ),
+          ),);
+        },
+        itemCount: 3,
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+
       ),
     );
   }
