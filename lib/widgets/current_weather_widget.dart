@@ -1,8 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/utils/custom_colors.dart';
-
-import '../models/weather_daily_data.dart';
+import 'package:weatherapp_starter_project/models/weather_daily_data.dart';
 
 class CurrentWeatherWidget extends StatelessWidget {
   final WeatherDailyData weatherDailyData;
@@ -13,6 +12,7 @@ class CurrentWeatherWidget extends StatelessWidget {
     required this.weatherDailyData,
     required this.index,
   }) : super(key: key);
+
 
   String getDay(final day) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(day * 1000);
