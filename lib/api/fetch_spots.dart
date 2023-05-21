@@ -10,7 +10,7 @@ class FetchSpotsAPI{
 
   Future<List<Spot>> getSpots() async {
 
-    var response = await http.get(Uri.parse("https://gostargazing.co.uk/wp-admin/admin-ajax.php?action=gost_leaflet_map_locations&location_categories=observatory,dark-sky-site,recommended-stargazing-site,go-stargazing-site,aurora-viewpoint"));
+    var response = await http.get(Uri.parse("https://corsproxy.io/?https://gostargazing.co.uk/wp-admin/admin-ajax.php?action=gost_leaflet_map_locations&location_categories=observatory,dark-sky-site,recommended-stargazing-site,go-stargazing-site,aurora-viewpoint"));
     developer.log("Got stargazing spots from gostargazing.co.uk");
     var jsonString = jsonDecode(response.body);
     return jsonString.map((x) => Spot.fromJson(x)).toList().cast<Spot>();
