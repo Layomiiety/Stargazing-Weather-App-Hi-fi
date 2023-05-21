@@ -37,34 +37,32 @@ class _NavbarState extends State<NavBar> {
     // rebuild anything that needs updating rather than
     // having to individually changes instances of widgets.
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        destinations: const <NavigationDestination>[
+          NavigationDestination(
             icon: Icon(Icons.sunny),
             label: 'Weather',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.map),
             label: 'Map',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.newspaper),
             label: 'News',
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showUnselectedLabels: false,
+        onDestinationSelected: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        selectedIndex: _selectedIndex,
       ),
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,
       )
     );
-  }
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }

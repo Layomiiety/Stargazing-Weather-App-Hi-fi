@@ -73,7 +73,7 @@ class WeatherScreenState extends State<WeatherScreen> {
         },
         itemCount: 3,
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
+        physics: const PageScrollPhysics(),
 
       ),
     );
