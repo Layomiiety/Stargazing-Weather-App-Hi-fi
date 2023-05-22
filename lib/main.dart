@@ -16,7 +16,12 @@ class MyApp extends StatelessWidget {
       title: "Weather",
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      theme: ThemeData.dark(useMaterial3: true)
+      theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          primaryColor: const Color.fromRGBO(136, 153, 166, 1),
+          scaffoldBackgroundColor: const Color.fromRGBO(0, 0, 25, 1)
+      )
     );
   }
 }

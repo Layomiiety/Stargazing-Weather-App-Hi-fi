@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp_starter_project/screens/news_screen.dart';
 import 'package:weatherapp_starter_project/screens/weather_screen.dart';
 import 'package:weatherapp_starter_project/screens/map_screen.dart';
 
@@ -20,6 +21,7 @@ class _NavbarState extends State<NavBar> {
   static const List<Widget> _pages = <Widget>[
     WeatherScreen(),
     MapScreen(),
+    NewsScreen(),
     Icon(
       Icons.chat,
       size: 150,

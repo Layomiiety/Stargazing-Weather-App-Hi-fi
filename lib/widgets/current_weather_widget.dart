@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/utils/custom_colors.dart';
 import 'package:weatherapp_starter_project/models/weather_daily_data.dart';
 
+import 'package:shadow/shadow.dart';
 class CurrentWeatherWidget extends StatelessWidget {
   final WeatherDailyData weatherDailyData;
   final int index;
@@ -80,8 +81,17 @@ class CurrentWeatherWidget extends StatelessWidget {
           margin: const EdgeInsets.only(top: 15, bottom: 20, left: 20),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-              color: CustomColors.boxcolor.withAlpha(150),
-              borderRadius: BorderRadius.circular(20)),
+              color: const Color.fromRGBO(0, 0, 25, 1),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                  BoxShadow(
+                      color: const Color.fromRGBO(136, 153, 166, 1),
+                      offset: const Offset(0, 0),
+                      blurRadius: 0,
+                      spreadRadius: width / 360
+                  )
+              ]
+          ),
           child: Row(
             children: [
               // background for image

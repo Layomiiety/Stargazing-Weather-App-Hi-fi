@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:weatherapp_starter_project/models/preferences.dart';
 import 'package:weatherapp_starter_project/screens/weather_screen.dart';
+
+import 'news_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -70,9 +73,7 @@ class SettingsState extends State<SettingsScreen> {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-                leading: IconButton(
-                    onPressed: _exitSettings,
-                    icon: const Icon(Icons.arrow_left)),
+                leading: BackButton(),
                 title: const Text('Settings')),
             body: Column(
               children: [
@@ -222,7 +223,8 @@ class SettingsState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_closeSettings) {
-      return const WeatherScreen();
+        print(pageIndex + 1);
+      return const NewsScreen();
     }
     _pages = <Widget>[settingsPage(), privacyPolicyPage(), addFavouritesPage()];
     return Scaffold(body: IndexedStack(index: pageIndex, children: _pages));
