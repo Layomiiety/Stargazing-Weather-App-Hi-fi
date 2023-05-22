@@ -1,28 +1,28 @@
 class Temp {
-	double? day;
-	double? min;
-	double? max;
-	double? night;
-	double? eve;
-	double? morn;
+  int? day;
+  int? min;
+  int? max;
+  int? night;
+  int? eve;
+  int? morn;
 
-	Temp({this.day, this.min, this.max, this.night, this.eve, this.morn});
+  Temp({this.day, this.min, this.max, this.night, this.eve, this.morn});
 
-	factory Temp.fromJson(Map<String, dynamic> json) => Temp(
-				day: (json['day'] as num?)?.toDouble(),
-				min: (json['min'] as num?)?.toDouble(),
-				max: (json['max'] as num?)?.toDouble(),
-				night: (json['night'] as num?)?.toDouble(),
-				eve: (json['eve'] as num?)?.toDouble(),
-				morn: (json['morn'] as num?)?.toDouble(),
-			);
+  factory Temp.fromJson(Map<String, dynamic> json) => Temp(
+        day: (json['day'] as num?)?.toInt(),
+        min: (json['min'] as num?)?.toInt(),
+        max: (json['max'] as num?)?.toInt(),
+        night: (json['night'] as num?)?.toInt(),
+        eve: (json['eve'] as num?)?.toInt(),
+        morn: (json['morn'] as num?)?.toInt(),
+      );
 
-	Map<String, dynamic> toJson() => {
-				'day': day,
-				'min': min,
-				'max': max,
-				'night': night,
-				'eve': eve,
-				'morn': morn,
-			};
+  Map<String, dynamic> toJson() => {
+        'day': day,
+        'min': min,
+        'max': max,
+        'night': night,
+        'eve': eve,
+        'morn': morn,
+      };
 }
