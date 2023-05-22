@@ -91,8 +91,9 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 9,
-      child:
-          Text(value - value.toInt() < 0.001 ? value.toInt().toString() : ""),
+      child: value == meta.min || value == meta.max
+          ? Container()
+          : Text(value.toInt().toString()),
     );
   }
 
@@ -143,7 +144,6 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
             ? CustomColors.boxColor
             : Theme.of(context).cardColor),
         margin: const EdgeInsets.only(top: 15, bottom: 20, left: 20),
-        color: const Color.fromRGBO(0, 0, 25, 1),
         child: InkWell(
             child: Container(
                 height: 100,
@@ -215,50 +215,58 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
   Widget detailsWidget(hourly, index, double Function(Hourly h) propFunction) {
     return AnimatedContainer(
       height: quantities[index].detailsVisible ? 200 : 0,
-      decoration: const BoxDecoration(color: CustomColors.boxColor),
+      // decoration: const BoxDecoration(color: CustomColors.boxColor),
       duration: const Duration(milliseconds: 200),
       child: Visibility(
           visible: quantities[index].detailsVisible,
-          child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: LineChart(
-                LineChartData(
-                  lineBarsData: [
-                    LineChartBarData(
-                        spots: hourly
-                            .map<FlSpot>((e) =>
-                                FlSpot(e.dt!.toDouble(), propFunction(e)))
-                            .toList(),
-                        dotData: FlDotData(show: false),
-                        isCurved: true)
-                  ],
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
+          child: Card(
+              color: CustomColors.boxColor,
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: Padding(
+                  padding: const EdgeInsets.only(top: 15, right: 15),
+                  child: LineChart(
+                    LineChartData(
+                      lineBarsData: [
+                        LineChartBarData(
+                            spots: hourly
+                                .map<FlSpot>((e) =>
+                                    FlSpot(e.dt!.toDouble(), propFunction(e)))
+                                .toList(),
+                            dotData: FlDotData(show: false),
+                            isCurved: true)
+                      ],
+                      titlesData: FlTitlesData(
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            getTitlesWidget: (value, meta) => Container(),
                             showTitles: true,
-                            reservedSize: 40,
-                            getTitlesWidget: getTimeTicks,
-                            interval: 3600)),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
+                            reservedSize: 10,
+                          ),
+                        ),
+                        bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 40,
+                                getTitlesWidget: getTimeTicks,
+                                interval: 3600)),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 50,
+                            getTitlesWidget: getIntTicks,
+                          ),
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      gridData: FlGridData(show: false),
+                      borderData: FlBorderData(show: false),
                     ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 44,
-                          getTitlesWidget: getIntTicks),
-                    ),
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                  ),
-                  gridData: FlGridData(show: false),
-                  borderData: FlBorderData(show: false),
-                ),
-                swapAnimationDuration: const Duration(milliseconds: 150),
-                // Optional
-                swapAnimationCurve: Curves.linear, // Optional
-              ))),
+                    swapAnimationDuration: const Duration(milliseconds: 150),
+                    // Optional
+                    swapAnimationCurve: Curves.linear, // Optional
+                  )))),
     );
   }
 
