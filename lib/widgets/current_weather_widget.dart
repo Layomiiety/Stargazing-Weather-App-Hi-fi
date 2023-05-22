@@ -2,8 +2,9 @@ import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/models/weather/hourly.dart';
 import 'package:weatherapp_starter_project/models/weather_data.dart';
+import 'package:weatherapp_starter_project/models/weather_quantity.dart';
 import 'package:weatherapp_starter_project/utils/custom_colors.dart';
-import 'package:weatherapp_starter_project/models/weather_daily_data.dart';
+import 'package:weatherapp_starter_project/models/weather/daily.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class CurrentWeatherWidget extends StatefulWidget {
@@ -21,7 +22,48 @@ class CurrentWeatherWidget extends StatefulWidget {
 }
 
 class _CurrentWeatherState extends State<CurrentWeatherWidget> {
-  bool showTemp = false;
+  List<WeatherQuantity> quantities = [
+    WeatherQuantity(
+        title: "Temperature",
+        value: (e) => "${e.temp!.night?.toInt()}°",
+        icon: "assets/icons/temp.png",
+        detailsEnabled: true),
+    WeatherQuantity(
+        title: "Cloud Cover",
+        value: (e) => "${e.clouds.toString()}%",
+        icon: "assets/icons/clouds.png",
+        detailsEnabled: true),
+    WeatherQuantity(
+        title: "Humidity",
+        value: (e) => "${e.humidity.toString()}%",
+        icon: "assets/icons/humidity.png",
+        detailsEnabled: true),
+    WeatherQuantity(
+        title: "Precipitation",
+        value: (e) => "${(e.pop! * 100).toInt()}%",
+        icon: "assets/icons/rain.png",
+        detailsEnabled: true),
+    WeatherQuantity(
+        title: "Sunrise",
+        value: (e) => getTime(e.sunrise!),
+        icon: "assets/icons/sunrise.png",
+        detailsEnabled: false),
+    WeatherQuantity(
+        title: "Sunset",
+        value: (e) => getTime(e.sunset!),
+        icon: "assets/icons/sunset.png",
+        detailsEnabled: false),
+    WeatherQuantity(
+        title: "Moonrise",
+        value: (e) => getTime(e.moonrise!),
+        icon: "assets/icons/moon.png",
+        detailsEnabled: false),
+    WeatherQuantity(
+        title: "Wind Speed",
+        value: (e) => "${e.windSpeed} m/s",
+        icon: "assets/icons/wind.png",
+        detailsEnabled: true),
+  ];
 
   String getDay(final day) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(day * 1000);
@@ -29,7 +71,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
     return x;
   }
 
-  String getTime(final epochTime) {
+  static String getTime(final int epochTime) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(epochTime * 1000);
     final formattedTime = DateFormat('HH:mm').format(time);
     return formattedTime;
@@ -39,8 +81,8 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 9,
-      child: Text(int.parse(getTime(value).substring(0, 2)) % 3 == 0
-          ? getTime(value).substring(0, 2)
+      child: Text(int.parse(getTime(value.toInt()).substring(0, 2)) % 4 == 0
+          ? getTime(value.toInt()).substring(0, 2)
           : ""),
     );
   }
@@ -49,7 +91,8 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 9,
-      child: Text(value - value.toInt() < 0.001 ? value.toString() : ""),
+      child:
+          Text(value - value.toInt() < 0.001 ? value.toInt().toString() : ""),
     );
   }
 
@@ -63,85 +106,42 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
       const SizedBox(
         height: 15,
       ),
-      Row(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            basicInfoWidget(width, "assets/icons/temp.png",
-                "${daily.temp!.night}°", "${daily.weather![0].description}"),
-            basicInfoWidget(width, "assets/icons/clouds.png",
-                "${daily.clouds!.toInt()}%", "Cloud Cover")
-          ]),
-      SizedBox(
-          height: 200,
-          child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: LineChart(
-                LineChartData(
-                  lineBarsData: [
-                    LineChartBarData(
-                        spots: hourly
-                            .map((e) => FlSpot(e.dt!.toDouble(), e.temp!))
-                            .toList(),
-                        dotData: FlDotData(show: false),
-                        isCurved: true)
-                  ],
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: getTimeTicks,
-                            interval: 3600)),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 44,
-                          interval: 2,
-                          getTitlesWidget: getIntTicks),
-                    ),
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                  ),
-                  gridData: FlGridData(show: false),
-                  borderData: FlBorderData(show: false),
-                ),
-                swapAnimationDuration: const Duration(milliseconds: 150),
-                // Optional
-                swapAnimationCurve: Curves.linear, // Optional
-              ))),
+      Row(children: [
+        basicInfoWidget(width, quantities[0], daily),
+        basicInfoWidget(width, quantities[1], daily),
+      ]),
+      detailsWidget(hourly, 0, (e) => e.temp!),
+      detailsWidget(hourly, 1, (e) => e.clouds!.toDouble()),
       Row(
         children: [
-          basicInfoWidget(width, "assets/icons/humidity.png",
-              "${daily.humidity!.toInt()}%", "Humidity"),
-          basicInfoWidget(width, "assets/icons/rain.png",
-              "${daily.windSpeed!.toInt()}%", "Precipitation")
+          basicInfoWidget(width, quantities[2], daily),
+          basicInfoWidget(width, quantities[3], daily),
+        ],
+      ),
+      detailsWidget(hourly, 2, (e) => e.humidity!.toDouble()),
+      detailsWidget(hourly, 3, (e) => (e.pop! * 100)),
+      Row(
+        children: [
+          basicInfoWidget(width, quantities[4], daily),
+          basicInfoWidget(width, quantities[5], daily),
         ],
       ),
       Row(
         children: [
-          basicInfoWidget(width, "assets/icons/sunrise.png",
-              getTime(daily.sunrise), "Sunrise"),
-          basicInfoWidget(width, "assets/icons/sunset.png",
-              getTime(daily.sunset), "Sunset"),
+          basicInfoWidget(width, quantities[6], daily),
+          basicInfoWidget(width, quantities[7], daily),
         ],
       ),
-      Row(
-        children: [
-          basicInfoWidget(width, "assets/icons/moon.png",
-              getTime(daily.moonrise), "Moonrise"),
-          basicInfoWidget(width, "assets/icons/wind.png",
-              "${daily.windSpeed}m/s", "Wind speed"),
-        ],
-      ),
+      detailsWidget(hourly, 7, (e) => e.windSpeed!.toDouble()),
     ]);
   }
 
-  Widget basicInfoWidget(width, image, mainText, description) {
+  Widget basicInfoWidget(width, WeatherQuantity quantity, Daily daily) {
     return Card(
         clipBehavior: Clip.hardEdge,
+        color: (quantity.detailsVisible
+            ? CustomColors.boxColor
+            : Theme.of(context).cardColor),
         margin: const EdgeInsets.only(top: 15, bottom: 20, left: 20),
         color: const Color.fromRGBO(0, 0, 25, 1),
         child: InkWell(
@@ -157,10 +157,10 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                       width: 60,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                          color: CustomColors.cardcolor,
+                          color: CustomColors.cardColor,
                           borderRadius: BorderRadius.circular(35)),
                       // actual image
-                      child: Image.asset(image),
+                      child: Image.asset(quantity.icon),
                     ),
 
                     Column(
@@ -172,13 +172,13 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                             // padding: const EdgeInsets.only(left: 5),
                             width: width - 80,
                             child: Text(
-                              mainText,
+                              quantity.value(daily),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontFamily: 'Ysabeau',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 25,
-                                color: CustomColors.textwhitecolor,
+                                color: CustomColors.textWhiteColor,
                               ),
                             ),
                           ),
@@ -186,7 +186,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                           SizedBox(
                               width: width - 80,
                               child: Text(
-                                description,
+                                quantity.title,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   fontFamily: 'HandWritten',
@@ -198,7 +198,68 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                         ]),
                   ],
                 )),
-            onTap: () {}));
+            onTap: () {
+              if (quantity.detailsEnabled) {
+                setState(() {
+                  for (int i = 0; i < quantities.length; i++) {
+                    if (quantities[i] != quantity) {
+                      quantities[i].detailsVisible = false;
+                    }
+                  }
+                  quantity.detailsVisible = !quantity.detailsVisible;
+                });
+              }
+            }));
+  }
+
+  Widget detailsWidget(hourly, index, double Function(Hourly h) propFunction) {
+    return AnimatedContainer(
+      height: quantities[index].detailsVisible ? 200 : 0,
+      decoration: const BoxDecoration(color: CustomColors.boxColor),
+      duration: const Duration(milliseconds: 200),
+      child: Visibility(
+          visible: quantities[index].detailsVisible,
+          child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: LineChart(
+                LineChartData(
+                  lineBarsData: [
+                    LineChartBarData(
+                        spots: hourly
+                            .map<FlSpot>((e) =>
+                                FlSpot(e.dt!.toDouble(), propFunction(e)))
+                            .toList(),
+                        dotData: FlDotData(show: false),
+                        isCurved: true)
+                  ],
+                  titlesData: FlTitlesData(
+                    bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 40,
+                            getTitlesWidget: getTimeTicks,
+                            interval: 3600)),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 44,
+                          getTitlesWidget: getIntTicks),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                  ),
+                  gridData: FlGridData(show: false),
+                  borderData: FlBorderData(show: false),
+                ),
+                swapAnimationDuration: const Duration(milliseconds: 150),
+                // Optional
+                swapAnimationCurve: Curves.linear, // Optional
+              ))),
+    );
   }
 
   Widget temperatureAreaWidget(Daily daily) {
@@ -214,7 +275,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
         Container(
           height: 50,
           width: 1,
-          color: CustomColors.dividecolor,
+          color: CustomColors.divideColor,
         ),
         RichText(
           text: TextSpan(children: [
@@ -223,7 +284,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 68,
-                  color: CustomColors.textwhitecolor,
+                  color: CustomColors.textWhiteColor,
                 )),
             TextSpan(
                 text: "${daily.weather![0].description}",
