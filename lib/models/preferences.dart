@@ -2,7 +2,7 @@
 
 class Preferences {
   static String temperatureUnits = '°C';
-  static String windSpeedUnits = 'km/h';
+  static String windSpeedUnits = 'm/s';
   static String visibilityUnits = 'km';
   static String dateFormat = 'MMMM dd,yyyy';
   static bool useCurrentLocation = true;
