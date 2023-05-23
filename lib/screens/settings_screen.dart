@@ -10,37 +10,54 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsState extends State<SettingsScreen> {
   int pageIndex = 0;
-  late List<Widget> _pages;
 
-  Widget privacyPolicyPage() {
-    return Scaffold(
-        appBar: AppBar(
-          leading: BackButton(onPressed: () => {_switchPage(0)}),
-          title: const Text('Privacy Policy'),
-        ),
-        body: const Column(
-          children: [
-            Text('Insert Privacy Policy Here'),
-          ],
-        ));
-  }
-
-  Column favouriteLocationsColumn() {
+  List<ListTile> favouriteLocationsColumn() {
     List<String> l = Preferences.favouriteLocations;
 
-    List<Widget> w = <Widget>[];
+    List<ListTile> w = [];
     for (int i = 0; i < l.length; i++) {
-      w.add(Row(
-        children: [
-          Text(l[i]),
-          TextButton(
+      w.add(_customTile(
+          l[i],
+          IconButton(
               onPressed: () => {_removeFavouriteLocation(i)},
-              child: const Text('X'))
-        ],
-      ));
+              icon: const Icon(Icons.clear))));
     }
+    return w;
+  }
 
-    return Column(children: w);
+  ListTile _dropdownTile(String title, String preferencesValue,
+      void Function(String) setter, List<String> options) {
+    return ListTile(
+        title: Padding(
+            padding: const EdgeInsets.only(left: 15), child: Text(title)),
+        trailing: DropdownButton(
+            value: preferencesValue,
+            items: options
+                .map<DropdownMenuItem<String>>(
+                    (s) => DropdownMenuItem<String>(value: s, child: Text(s)))
+                .toList(),
+            onChanged: (String? value) {
+              setState(() {
+                setter(value!);
+              });
+            }));
+  }
+
+  ListTile _customTile(String title, Widget trailing) {
+    return ListTile(
+        title: Padding(
+            padding: const EdgeInsets.only(left: 15), child: Text(title)),
+        trailing: trailing);
+  }
+
+  ListTile _headerTile(String title) {
+    return ListTile(
+      title: Text(title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          )),
+    );
   }
 
   Widget settingsPage() {
@@ -64,133 +81,93 @@ class SettingsState extends State<SettingsScreen> {
         appBar: AppBar(
             leading: BackButton(onPressed: _exitSettings),
             title: const Text('Settings')),
-        body: Column(
-          children: [
-            Center(
-                child: Column(
+        body: Container(
+            // padding: const EdgeInsets.all(10),
+            height: MediaQuery.of(context).size.height,
+            child: ListView(
+              // shrinkWrap: true,
               children: [
-                const Text('Units'),
-                Row(children: [
-                  const Text('Date Format'),
-                  DropdownButton(
-                      value: Preferences.dateFormat,
-                      items: dateFormatsList
-                          .map<DropdownMenuItem<String>>((s) =>
-                              DropdownMenuItem<String>(
-                                  value: s, child: Text(s)))
-                          .toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.dateFormat = value!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  const Text('Temperature'),
-                  DropdownButton(
-                      value: Preferences.temperatureUnits,
-                      items: temperatureUnitsList
-                          .map<DropdownMenuItem<String>>((s) =>
-                              DropdownMenuItem<String>(
-                                  value: s, child: Text(s)))
-                          .toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.temperatureUnits = value!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  const Text('Visibility'),
-                  DropdownButton(
-                      value: Preferences.visibilityUnits,
-                      items: visibilityUnitsList
-                          .map<DropdownMenuItem<String>>((String s) {
-                        return DropdownMenuItem<String>(
-                            value: s, child: Text(s));
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.visibilityUnits = value!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  const Text('Wind Speed'),
-                  DropdownButton(
-                      value: Preferences.windSpeedUnits,
-                      items: windSpeedUnitsList
-                          .map<DropdownMenuItem<String>>((String s) {
-                        return DropdownMenuItem<String>(
-                            value: s, child: Text(s));
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.windSpeedUnits = value!;
-                        });
-                      })
-                ]),
-              ],
-            )),
-            Center(
-                child: Column(children: [
-              const Text('Location'),
-              Row(
-                children: [
-                  const Text('Use current location'),
-                  Checkbox(
-                      value: Preferences.useCurrentLocation,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          Preferences.useCurrentLocation = value!;
-                        });
-                      })
-                ],
-              ),
-              Row(
-                children: [
-                  const Text('Favourites:'),
-                  TextButton(
-                      onPressed: () => {_switchPage(2)}, child: const Text('+'))
-                ],
-              ),
-              favouriteLocationsColumn()
-            ])),
-            Center(
-                child: TextButton(
-                    onPressed: () => {_switchPage(1)},
-                    child: const Text('Privacy Policy')))
-          ],
-        ));
+                    _headerTile('Units'),
+                    _dropdownTile('Date Format', Preferences.dateFormat,
+                        (e) => Preferences.dateFormat = e, dateFormatsList),
+                    _dropdownTile(
+                        'Temperature',
+                        Preferences.temperatureUnits,
+                        (e) => Preferences.temperatureUnits = e,
+                        temperatureUnitsList),
+                    _dropdownTile(
+                        'Visibility',
+                        Preferences.visibilityUnits,
+                        (e) => Preferences.visibilityUnits = e,
+                        visibilityUnitsList),
+                    _dropdownTile(
+                        'Wind Speed',
+                        Preferences.windSpeedUnits,
+                        (e) => Preferences.windSpeedUnits = e,
+                        windSpeedUnitsList),
+                    _headerTile('Location'),
+                    _customTile(
+                        'Use current location',
+                        Switch(
+                            value: Preferences.useCurrentLocation,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                Preferences.useCurrentLocation = value!;
+                              });
+                            })),
+                    _customTile(
+                        "Favourites:",
+                        IconButton(
+                            onPressed: () => addFavourite(),
+                            icon: const Icon(Icons.add)))
+                  ] +
+                  favouriteLocationsColumn() +
+                  [
+                    ListTile(
+                        title: TextButton(
+                            onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const PrivacyPolicyPage()))
+                                },
+                            child: const Text('Privacy Policy')))
+                  ],
+            )));
   }
 
-  Widget addFavouritesPage() {
-    String lt = 'Location';
-    var msgController = TextEditingController();
-    return Scaffold(
-        appBar: AppBar(
-          leading: BackButton(onPressed: () => {_switchPage(0)}),
-          title: const Text('Add Favourite Location'),
-        ),
-        body: Center(
-            child: TextField(
-          controller: msgController,
-          decoration:
-              InputDecoration(border: OutlineInputBorder(), labelText: lt),
-          onSubmitted: (String? value) {
-            setState(() {
-              Preferences.favouriteLocations.add(value!);
-              pageIndex = 0;
-              msgController.clear();
-            });
-          },
-        )));
-  }
-
-  void _switchPage(int x) {
-    setState(() {
-      pageIndex = x;
-    });
+  void addFavourite() {
+    var textFieldController = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: const Text('Add Favourite Location'),
+              content: TextField(
+                onChanged: (value) {},
+                controller: textFieldController,
+                decoration: const InputDecoration(labelText: "Location"),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    setState(() {
+                      Preferences.favouriteLocations
+                          .add(textFieldController.value.text);
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ]);
+        });
   }
 
   void _exitSettings() {
@@ -205,7 +182,26 @@ class SettingsState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _pages = <Widget>[settingsPage(), privacyPolicyPage(), addFavouritesPage()];
-    return Scaffold(body: IndexedStack(index: pageIndex, children: _pages));
+    return settingsPage();
+  }
+}
+
+class PrivacyPolicyPage extends StatelessWidget {
+  const PrivacyPolicyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: BackButton(onPressed: () => {Navigator.pop(context)}),
+          title: const Text('Privacy Policy'),
+        ),
+        body: const Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Text('Insert Privacy Policy Here'),
+              ],
+            )));
   }
 }
