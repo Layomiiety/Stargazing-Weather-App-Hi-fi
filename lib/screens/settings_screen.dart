@@ -31,6 +31,7 @@ class SettingsState extends State<SettingsScreen> {
     List<Widget> w = <Widget>[];
     for (int i = 0; i < l.length; i++) {
       w.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(l[i]),
           TextButton(
@@ -69,73 +70,86 @@ class SettingsState extends State<SettingsScreen> {
             Center(
                 child: Column(
               children: [
-                const Text('Units'),
-                Row(children: [
-                  const Text('Date Format'),
-                  DropdownButton(
-                      value: Preferences.dateFormat,
-                      items: dateFormatsList
-                          .map<DropdownMenuItem<String>>((s) =>
-                              DropdownMenuItem<String>(
-                                  value: s, child: Text(s)))
-                          .toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.dateFormat = value!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  const Text('Temperature'),
-                  DropdownButton(
-                      value: Preferences.temperatureUnits,
-                      items: temperatureUnitsList
-                          .map<DropdownMenuItem<String>>((s) =>
-                              DropdownMenuItem<String>(
-                                  value: s, child: Text(s)))
-                          .toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.temperatureUnits = value!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  const Text('Visibility'),
-                  DropdownButton(
-                      value: Preferences.visibilityUnits,
-                      items: visibilityUnitsList
-                          .map<DropdownMenuItem<String>>((String s) {
-                        return DropdownMenuItem<String>(
-                            value: s, child: Text(s));
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.visibilityUnits = value!;
-                        });
-                      })
-                ]),
-                Row(children: [
-                  const Text('Wind Speed'),
-                  DropdownButton(
-                      value: Preferences.windSpeedUnits,
-                      items: windSpeedUnitsList
-                          .map<DropdownMenuItem<String>>((String s) {
-                        return DropdownMenuItem<String>(
-                            value: s, child: Text(s));
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          Preferences.windSpeedUnits = value!;
-                        });
-                      })
-                ]),
+                const Text('Units',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, height: 3, fontSize: 20)),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Date Format'),
+                      DropdownButton(
+                          value: Preferences.dateFormat,
+                          items: dateFormatsList
+                              .map<DropdownMenuItem<String>>((s) =>
+                                  DropdownMenuItem<String>(
+                                      value: s, child: Text(s)))
+                              .toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              Preferences.dateFormat = value!;
+                            });
+                          })
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Temperature'),
+                      DropdownButton(
+                          value: Preferences.temperatureUnits,
+                          items: temperatureUnitsList
+                              .map<DropdownMenuItem<String>>((s) =>
+                                  DropdownMenuItem<String>(
+                                      value: s, child: Text(s)))
+                              .toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              Preferences.temperatureUnits = value!;
+                            });
+                          })
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Visibility'),
+                      DropdownButton(
+                          value: Preferences.visibilityUnits,
+                          items: visibilityUnitsList
+                              .map<DropdownMenuItem<String>>((String s) {
+                            return DropdownMenuItem<String>(
+                                value: s, child: Text(s));
+                          }).toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              Preferences.visibilityUnits = value!;
+                            });
+                          })
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Wind Speed'),
+                      DropdownButton(
+                          value: Preferences.windSpeedUnits,
+                          items: windSpeedUnitsList
+                              .map<DropdownMenuItem<String>>((String s) {
+                            return DropdownMenuItem<String>(
+                                value: s, child: Text(s));
+                          }).toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              Preferences.windSpeedUnits = value!;
+                            });
+                          })
+                    ]),
               ],
             )),
             Center(
                 child: Column(children: [
-              const Text('Location'),
+              const Text('Location',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, height: 3, fontSize: 20)),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Use current location'),
                   Checkbox(
@@ -148,6 +162,7 @@ class SettingsState extends State<SettingsScreen> {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Favourites:'),
                   TextButton(
