@@ -23,7 +23,7 @@ class WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
     if (_showSettingsPage) {
-      return const SettingsScreen();
+      return const SettingsScreen(from: "weather");
     }
     return Scaffold(
       //settings button

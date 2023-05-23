@@ -7,7 +7,9 @@ import 'package:weatherapp_starter_project/screens/weather_screen.dart';
 import 'news_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({super.key, required this.from});
+
+  final String from;
 
   @override
   State<SettingsScreen> createState() => SettingsState();
@@ -73,7 +75,7 @@ class SettingsState extends State<SettingsScreen> {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-                leading: BackButton(),
+                leading: BackButton(onPressed: _exitSettings),
                 title: const Text('Settings')),
             body: Column(
               children: [
@@ -223,8 +225,19 @@ class SettingsState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_closeSettings) {
-        print(pageIndex + 1);
-      return const NewsScreen();
+      late Widget ret;
+      switch (widget.from) {
+        case "news":
+          {
+            ret = const NewsScreen();
+          }
+          break;
+        case "weather":
+          {
+            ret = const WeatherScreen();
+          }
+      }
+      return ret;
     }
     _pages = <Widget>[settingsPage(), privacyPolicyPage(), addFavouritesPage()];
     return Scaffold(body: IndexedStack(index: pageIndex, children: _pages));
