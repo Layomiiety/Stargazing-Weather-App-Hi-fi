@@ -1,68 +1,66 @@
 /* import 'package:flutter/material.dart'; */
 
 class Preferences {
-  static String temperatureUnits = '°C';
-  static String windSpeedUnits = 'm/s';
-  static String visibilityUnits = 'km';
-  static String dateFormat = 'MMMM dd,yyyy';
-  static bool useCurrentLocation = true;
-  static List<String> favouriteLocations = <String>[];
+  String temperatureUnits = '°C';
+  String windSpeedUnits = 'm/s';
+  String visibilityUnits = 'km';
+  String dateFormat = 'MMMM dd,yyyy';
+  bool useCurrentLocation = true;
+  List<String> favouriteLocations = <String>[];
 
-  static String getTempInUnits(int x) {
-    late int ret;
+  static double round(double x, int d) {
+    return double.parse(x.toStringAsFixed(d));
+  }
+
+  double getTempInUnits(double x) {
     switch (temperatureUnits) {
       case '°C':
         {
-          ret = x;
+          return round(x, 1);
         }
-        break;
       case '°F':
         {
-          double temp = x * 9 / 5 + 32;
-          ret = temp.toInt();
+          return round(x * 9 / 5 + 32, 1);
         }
-        break;
     }
-    return '$ret $temperatureUnits';
+    return 0;
   }
 
-  static String getWindSpeedInUnits(int x) {
-    late int ret;
+  String tempFormat(double x) {
+    return '${getTempInUnits(x).toInt()} $temperatureUnits';
+  }
+
+  double getWindSpeedInUnits(double x) {
     switch (windSpeedUnits) {
       case 'km/h':
         {
-          double temp = 3.6 * x;
-          ret = temp.toInt();
+          return round(3.6 * x, 1);
         }
-        break;
       case 'm/s':
         {
-          ret = x;
+          return x;
         }
-        break;
       case 'ft/s':
         {
-          double temp = 3.28084 * x;
-          ret = temp.toInt();
+          return round(3.28084 * x, 1);
         }
-        break;
       case 'mph':
         {
-          double temp = 2.23694 * x;
-          ret = temp.toInt();
+          return round(2.23694 * x, 1);
         }
-        break;
       case 'knots':
         {
-          double temp = 1.94384 * x;
-          ret = temp.toInt();
+          return round(1.94384 * x, 1);
         }
-        break;
     }
-    return '$ret $windSpeedUnits';
+    return 0;
   }
 
-  static String getVisibilityInUnits(int x) {
+  String windFormat(double x) {
+    return '${getWindSpeedInUnits(x)} $windSpeedUnits';
+  }
+
+  String getVisibilityInUnits(int x) {
     late int ret;
     switch (visibilityUnits) {
       case 'km':
@@ -90,32 +88,5 @@ class Preferences {
         break;
     }
     return '$ret $visibilityUnits';
-  }
-
-  static String getDateFormat() {
-    late String ret;
-    switch (dateFormat) {
-      case 'MMMM dd,yyyy':
-        {
-          ret = 'yMMMMd';
-        }
-        break;
-      case 'ddMMMMyyyy':
-        {
-          ret = 'dMMMMy';
-        }
-        break;
-      case 'MMMM dd':
-        {
-          ret = 'MMMMd';
-        }
-        break;
-      case 'ddMMMM':
-        {
-          ret = 'dMMMM';
-        }
-        break;
-    }
-    return ret;
   }
 }

@@ -5,17 +5,20 @@ import 'package:weatherapp_starter_project/models/weather_data.dart';
 import 'package:weatherapp_starter_project/models/weather_quantity.dart';
 import 'package:weatherapp_starter_project/utils/custom_colors.dart';
 import 'package:weatherapp_starter_project/models/weather/daily.dart';
+import 'package:weatherapp_starter_project/models/preferences.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class CurrentWeatherWidget extends StatefulWidget {
   final WeatherData weatherData;
   final int index;
+  final Preferences preferences;
 
-  const CurrentWeatherWidget({
-    Key? key,
-    required this.weatherData,
-    required this.index,
-  }) : super(key: key);
+  const CurrentWeatherWidget(
+      {Key? key,
+      required this.weatherData,
+      required this.index,
+      required this.preferences})
+      : super(key: key);
 
   @override
   State<CurrentWeatherWidget> createState() => _CurrentWeatherState();
@@ -25,7 +28,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
   List<WeatherQuantity> quantities = [
     WeatherQuantity(
         title: "Temperature",
-        value: (e) => "${e.temp!.night?.toInt()}°",
+        value: (e) => "",
         icon: "assets/icons/temp.png",
         detailsEnabled: true),
     WeatherQuantity(
@@ -60,8 +63,8 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
         detailsEnabled: false),
     WeatherQuantity(
         title: "Wind Speed",
-        value: (e) => "${e.windSpeed} m/s",
-        icon: "assets/icons/wind.png",
+        value: (e) => "",
+        icon: "assets/icons/windspeed.png",
         detailsEnabled: true),
   ];
 
@@ -99,6 +102,10 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
 
   @override
   Widget build(BuildContext context) {
+    quantities[0].value =
+        (e) => widget.preferences.tempFormat(e.temp!.night!.toDouble());
+    quantities[7].value = (e) => widget.preferences.windFormat(e.windSpeed!);
+
     final width = (MediaQuery.of(context).size.width / 2) - 30;
     final Daily daily = widget.weatherData.daily!.daily[widget.index];
     final List<Hourly> hourly = widget.weatherData.hourly!.hourly;
@@ -111,7 +118,8 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
         basicInfoWidget(width, quantities[0], daily),
         basicInfoWidget(width, quantities[1], daily),
       ]),
-      detailsWidget(hourly, 0, (e) => e.temp!),
+      detailsWidget(
+          hourly, 0, (e) => widget.preferences.getTempInUnits(e.temp!)),
       detailsWidget(hourly, 1, (e) => e.clouds!.toDouble()),
       Row(
         children: [
@@ -133,7 +141,12 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
           basicInfoWidget(width, quantities[7], daily),
         ],
       ),
-      detailsWidget(hourly, 7, (e) => e.windSpeed!.toDouble()),
+      detailsWidget(
+          hourly,
+          7,
+          (e) => double.parse(widget.preferences
+              .getWindSpeedInUnits(e.windSpeed!)
+              .toStringAsFixed(1))),
     ]);
   }
 
@@ -177,7 +190,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                               style: const TextStyle(
                                 fontFamily: 'Ysabeau',
                                 fontWeight: FontWeight.w600,
-                                fontSize: 25,
+                                fontSize: 22,
                                 color: CustomColors.textWhiteColor,
                               ),
                             ),
@@ -199,7 +212,7 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
                   ],
                 )),
             onTap: () {
-              if (quantity.detailsEnabled) {
+              if (quantity.detailsEnabled && widget.index == 0) {
                 setState(() {
                   for (int i = 0; i < quantities.length; i++) {
                     if (quantities[i] != quantity) {
@@ -288,7 +301,8 @@ class _CurrentWeatherState extends State<CurrentWeatherWidget> {
         RichText(
           text: TextSpan(children: [
             TextSpan(
-                text: "${daily.temp!.night}°",
+                text: widget.preferences
+                    .tempFormat(daily.temp!.night!.toDouble()),
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 68,

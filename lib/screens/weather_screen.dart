@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weatherapp_starter_project/controllers/global_controller.dart';
+import 'package:weatherapp_starter_project/models/preferences.dart';
 import 'package:weatherapp_starter_project/widgets/daily_weather_forecast.dart';
 import 'package:weatherapp_starter_project/widgets/header_widget.dart';
 import 'package:weatherapp_starter_project/widgets/current_weather_widget.dart';
@@ -8,7 +9,8 @@ import 'package:weatherapp_starter_project/widgets/current_weather_widget.dart';
 import 'package:weatherapp_starter_project/screens/settings_screen.dart';
 
 class WeatherScreen extends StatefulWidget {
-  const WeatherScreen({super.key});
+  final Preferences preferences;
+  const WeatherScreen({super.key, required this.preferences});
 
   @override
   State<WeatherScreen> createState() => WeatherScreenState();
@@ -50,10 +52,12 @@ class WeatherScreenState extends State<WeatherScreen> {
                               .getWeatherData()
                               .getDailyWeather(),
                           index: index,
+                          preferences: widget.preferences,
                         ), // location and date
                         CurrentWeatherWidget(
                           weatherData: globalController.getWeatherData(),
                           index: index,
+                          preferences: widget.preferences,
                         ),
                         const SizedBox(
                           height: 20,
@@ -76,11 +80,11 @@ class WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-  void _openSettings() {
-    Navigator.of(context).push(
+  void _openSettings() async {
+    await Navigator.of(context).push(
       PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const SettingsScreen(),
+              SettingsScreen(preferences: widget.preferences),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return SlideTransition(
               position: animation
@@ -89,5 +93,8 @@ class WeatherScreenState extends State<WeatherScreen> {
             );
           }),
     );
+    setState(() {
+      widget.preferences;
+    });
   }
 }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:weatherapp_starter_project/models/preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final Preferences preferences;
+  const SettingsScreen({super.key, required this.preferences});
 
   @override
   State<SettingsScreen> createState() => SettingsState();
@@ -12,7 +13,7 @@ class SettingsState extends State<SettingsScreen> {
   int pageIndex = 0;
 
   List<ListTile> favouriteLocationsColumn() {
-    List<String> l = Preferences.favouriteLocations;
+    List<String> l = widget.preferences.favouriteLocations;
 
     List<ListTile> w = [];
     for (int i = 0; i < l.length; i++) {
@@ -81,38 +82,39 @@ class SettingsState extends State<SettingsScreen> {
         appBar: AppBar(
             leading: BackButton(onPressed: _exitSettings),
             title: const Text('Settings')),
-        body: Container(
-            // padding: const EdgeInsets.all(10),
+        body: SizedBox(
             height: MediaQuery.of(context).size.height,
             child: ListView(
-              // shrinkWrap: true,
               children: [
                     _headerTile('Units'),
-                    _dropdownTile('Date Format', Preferences.dateFormat,
-                        (e) => Preferences.dateFormat = e, dateFormatsList),
+                    _dropdownTile(
+                        'Date Format',
+                        widget.preferences.dateFormat,
+                        (e) => widget.preferences.dateFormat = e,
+                        dateFormatsList),
                     _dropdownTile(
                         'Temperature',
-                        Preferences.temperatureUnits,
-                        (e) => Preferences.temperatureUnits = e,
+                        widget.preferences.temperatureUnits,
+                        (e) => widget.preferences.temperatureUnits = e,
                         temperatureUnitsList),
                     _dropdownTile(
                         'Visibility',
-                        Preferences.visibilityUnits,
-                        (e) => Preferences.visibilityUnits = e,
+                        widget.preferences.visibilityUnits,
+                        (e) => widget.preferences.visibilityUnits = e,
                         visibilityUnitsList),
                     _dropdownTile(
                         'Wind Speed',
-                        Preferences.windSpeedUnits,
-                        (e) => Preferences.windSpeedUnits = e,
+                        widget.preferences.windSpeedUnits,
+                        (e) => widget.preferences.windSpeedUnits = e,
                         windSpeedUnitsList),
                     _headerTile('Location'),
                     _customTile(
                         'Use current location',
                         Switch(
-                            value: Preferences.useCurrentLocation,
+                            value: widget.preferences.useCurrentLocation,
                             onChanged: (bool? value) {
                               setState(() {
-                                Preferences.useCurrentLocation = value!;
+                                widget.preferences.useCurrentLocation = value!;
                               });
                             })),
                     _customTile(
@@ -160,7 +162,7 @@ class SettingsState extends State<SettingsScreen> {
                   child: const Text('OK'),
                   onPressed: () {
                     setState(() {
-                      Preferences.favouriteLocations
+                      widget.preferences.favouriteLocations
                           .add(textFieldController.value.text);
                       Navigator.pop(context);
                     });
@@ -176,7 +178,7 @@ class SettingsState extends State<SettingsScreen> {
 
   void _removeFavouriteLocation(int x) {
     setState(() {
-      Preferences.favouriteLocations.removeAt(x);
+      widget.preferences.favouriteLocations.removeAt(x);
     });
   }
 

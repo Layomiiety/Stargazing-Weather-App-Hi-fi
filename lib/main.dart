@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp_starter_project/models/preferences.dart';
 import 'package:weatherapp_starter_project/screens/navbar.dart';
 
 void main() {
@@ -10,8 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Preferences preferences = Preferences();
     return MaterialApp(
-        home: const NavBar(),
+        home: NavBar(preferences: preferences),
         title: "Weather",
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.dark,

@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_starter_project/controllers/global_controller.dart';
+import 'package:weatherapp_starter_project/models/preferences.dart';
 
 import 'package:weatherapp_starter_project/models/weather_daily_data.dart';
 
 class HeaderWidget extends StatefulWidget {
   final WeatherDailyData weatherDailyData;
+  final Preferences preferences;
   final int index;
   const HeaderWidget({
     Key? key,
     required this.weatherDailyData,
+    required this.preferences,
     required this.index,
   }) : super(key: key);
 
@@ -48,7 +51,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   Widget build(BuildContext context) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(
         1000 * widget.weatherDailyData.daily[widget.index].dt!.toInt());
-    String date = DateFormat("yMMMMd").format(time);
+    String date = DateFormat(widget.preferences.dateFormat).format(time);
     return Column(
       children: [
         //location
