@@ -13,14 +13,10 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  bool _showSettingsPage = false;
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);
   @override
   Widget build(BuildContext context) {
-    if (_showSettingsPage) {
-      return const SettingsScreen(from: "news");
-    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -53,8 +49,17 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   void _openSettings() {
-    setState(() {
-      _showSettingsPage = true;
-    });
+    Navigator.of(context).push(
+      PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const SettingsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: animation
+                  .drive(Tween(begin: const Offset(0, 1), end: Offset.zero)),
+              child: child,
+            );
+          }),
+    );
   }
 }

@@ -15,16 +15,11 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class WeatherScreenState extends State<WeatherScreen> {
-  bool _showSettingsPage = false;
-
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
-    if (_showSettingsPage) {
-      return const SettingsScreen(from: "weather");
-    }
     return Scaffold(
       //settings button
       extendBodyBehindAppBar: true,
@@ -82,8 +77,17 @@ class WeatherScreenState extends State<WeatherScreen> {
   }
 
   void _openSettings() {
-    setState(() {
-      _showSettingsPage = true;
-    });
+    Navigator.of(context).push(
+      PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const SettingsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: animation
+                  .drive(Tween(begin: const Offset(0, 1), end: Offset.zero)),
+              child: child,
+            );
+          }),
+    );
   }
 }
